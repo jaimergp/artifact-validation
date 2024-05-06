@@ -12,20 +12,20 @@ jobs:
     steps:
       - name: turnstyle
         id: turnstyle
-        uses: beckermr/turnstyle-python@v1
+        uses: beckermr/turnstyle-python@e997c7ea75032a98f3b515ef8ee0ca89cf172713 # v1
         with:
           continue-after-seconds: 10
           poll-interval-seconds: 5
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
         if: success() && ! steps.turnstyle.outputs.force_continued
         with:
           fetch-depth: 100
 
       - name: install micromamba
         if: success() && ! steps.turnstyle.outputs.force_continued
-        uses: mamba-org/provision-with-micromamba@main
+        uses: mamba-org/provision-with-micromamba@3c96c0c27676490c63c18bc81f5c51895ac3e0e6 # pin@main
 
       - name: configure git and install code
         if: success() && ! steps.turnstyle.outputs.force_continued
@@ -52,7 +52,7 @@ jobs:
       - name: generate token
         if: ${{ ! cancelled() && ! steps.turnstyle.outputs.force_continued }}
         id: generate_token
-        uses: conda-forge/github-app-token@e3ab451d57e120b956292a1fa1d21fe4ba171c36
+        uses: conda-forge/github-app-token@e3ab451d57e120b956292a1fa1d21fe4ba171c36 # pin@e3ab451d57e120b956292a1fa1d21fe4ba171c36
         with:
           app_id: ${{ secrets.CF_CURATOR_APP_ID }}
           private_key: ${{ secrets.CF_CURATOR_PRIVATE_KEY }}
@@ -84,7 +84,7 @@ jobs:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
       - name: trigger next job
-        uses: benc-uk/workflow-dispatch@798e70c97009500150087d30d9f11c5444830385
+        uses: benc-uk/workflow-dispatch@798e70c97009500150087d30d9f11c5444830385 # pin@798e70c97009500150087d30d9f11c5444830385
         if: github.ref == 'refs/heads/main' && success() && ! steps.turnstyle.outputs.force_continued
         with:
           workflow: scan
